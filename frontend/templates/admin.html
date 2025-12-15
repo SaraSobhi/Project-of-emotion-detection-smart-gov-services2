@@ -170,7 +170,7 @@
                     {% if feedbacks %}
                     {% for fb in feedbacks %}
                     <tr class="border-b border-white/5 hover:bg-white/5 transition-colors duration-150 feedback-row"
-                        data-date="{{ fb.created_at }}" data-sentiment="{{ fb.sentiment or '' }}">
+                        data-id="{{ fb.id }}" data-date="{{ fb.created_at }}" data-sentiment="{{ fb.sentiment or '' }}">
                         <td class="py-3 px-4 text-gray-300 text-sm">
                             {{ fb.created_at.strftime('%Y-%m-%d %H:%M') if fb.created_at else 'N/A' }}
                         </td>
@@ -178,10 +178,10 @@
                             <div class="line-clamp-2">{{ fb.feedback }}</div>
                         </td>
                         <td class="py-3 px-4">
-                            {% if fb.sentiment == 'positive' %}
+                            {% if fb.sentiment == 'Positive' %}
                             <span
                                 class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-semibold">Positive</span>
-                            {% elif fb.sentiment == 'negative' %}
+                            {% elif fb.sentiment == 'Negative' %}
                             <span
                                 class="px-3 py-1 bg-red-500/20 text-red-400 rounded-full text-xs font-semibold">Negative</span>
                             {% else %}
@@ -332,6 +332,7 @@
         rows.forEach(row => {
             const rowDate = row.getAttribute('data-date');
             const rowSentiment = row.getAttribute('data-sentiment').toLowerCase();
+            const rowId = row.getAttribute('data-id');
 
             let showRow = true;
 
@@ -350,10 +351,8 @@
 
             if (showRow) {
                 row.style.display = '';
-                // Find matching feedback data
-                const fbData = feedbacksData.find(fb =>
-                    fb.created_at && fb.created_at.includes(rowDate.split('.')[0])
-                );
+                // Find matching feedback data using ID
+                const fbData = feedbacksData.find(fb => fb.id === rowId);
                 if (fbData) visibleData.push(fbData);
             } else {
                 row.style.display = 'none';

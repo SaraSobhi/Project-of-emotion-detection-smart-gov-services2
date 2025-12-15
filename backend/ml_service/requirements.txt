@@ -1,0 +1,11 @@
+flask
+pandas
+numpy
+scikit-learn
+transformers
+torch
+datasets
+matplotlib
+seaborn
+# Optional: for specific version control or cuda support usually separate, 
+# but generic torch is fine for this context.

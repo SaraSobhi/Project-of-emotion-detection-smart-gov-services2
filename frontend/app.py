@@ -122,6 +122,15 @@ def admin():
         response = requests.get(f'{BACKEND_URL}/api/feedbacks')
         if response.status_code == 200:
             feedbacks = response.json()
+            # Convert date strings to datetime objects
+            from dateutil import parser
+            for fb in feedbacks:
+                if fb.get('created_at'):
+                    try:
+                        fb['created_at'] = parser.parse(fb['created_at'])
+                    except:
+                        fb['created_at'] = None
+            
             return render_template('admin.html', feedbacks=feedbacks, username=session.get('username'))
         else:
             return render_template('admin.html', feedbacks=[], error='Failed to load feedbacks')
