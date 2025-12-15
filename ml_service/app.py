@@ -5,8 +5,7 @@ import threading
 
 app = Flask(__name__)
 
-# Initialize model wrapper
-# We won't load the model immediately if it doesn't exist yet (first run)
+
 model_wrapper = ModelWrapper()
 if model_wrapper.load_model():
     print("Model loaded at startup.")
@@ -28,7 +27,7 @@ def predict():
     return jsonify(result)
 
 def run_training_background(dataset_path):
-    # This logic assumes we want to train in background and then reload the model
+   
     success, metrics = train_model(dataset_path)
     if success:
         print("Training completed successfully. Reloading model...")
@@ -39,11 +38,9 @@ def run_training_background(dataset_path):
 @app.route('/train', methods=['POST'])
 def train():
     data = request.get_json()
-    dataset_path = data.get('dataset_path', 'dataset.csv')
+    dataset_path = data.get('dataset_path', 'arabic_twitter_dataset.csv')
     
-    # Simple check if already training could be added here, but keeping it simple as requested
-    
-    # Run training in a separate thread to avoid blocking the response
+   
     thread = threading.Thread(target=run_training_background, args=(dataset_path,))
     thread.start()
     
